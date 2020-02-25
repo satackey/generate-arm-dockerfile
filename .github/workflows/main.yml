@@ -13,10 +13,15 @@ jobs:
 
     steps:
     - name: Set up Docker Buildx
-      id: buildx
       uses: crazy-max/ghaction-docker-buildx@v1
       with:
         version: latest
+
+    # - name: Update libseccomp-dev
+    #   run: |
+    #     sudo apt-get update
+    #     sudo apt-get install libseccomp-dev
+    #   # https://github.com/moby/moby/issues/35906
     
     - name: Available platforms
       run: echo ${{ steps.buildx.outputs.platforms }}
@@ -38,6 +43,14 @@ jobs:
         find ${{ matrix.repos }} -name "*.sh"  -type f -printf "%f\n" | xargs -I{} sh -c "cd repos/${{ matrix.repos }} && ${PWD}/${{ matrix.repos }}/{}"
         cd repos/${{ matrix.repos }}
 
+    # - name: Cache Docker build cache
+    #   uses: actions/cache@v1
+    #   with:
+    #     path: docker-build-cache
+    #     key: docker-build-cache-${{ matrix.repos }}-${{ hashFiles('repos/${{ matrix.repos }}/**') }}
+    #     restore-keys: |
+    #       docker-build-cache-${{ matrix.repos }}-
+
     - name: Build and push Docker image
       run: |
         docker buildx build \
@@ -47,3 +60,7 @@ jobs:
           -t satackey/${{ matrix.repos }}:latest \
           --push \
           repos/${{ matrix.repos }}
+
+
+      #     --cache-from type=local,src=docker-build-cache \
+      #     --cache-to type=local,dest=docker-build-cache \
