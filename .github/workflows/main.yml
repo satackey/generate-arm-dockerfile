@@ -1,0 +1,29 @@
+name: Main CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        repos: [steveltn-https-portal]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - run: |
+        ls -a
+        pwd
+
+    - uses: actions/checkout@v2
+      with:
+        repository: satackey/${{ matrix.repos }}
+        depth: 0
+        path: repos/${{ matrix.repos }}
+    
+    - run: |
+        ls -a /home/runner/work/generate-arm-dockerfile/generate-arm-dockerfile/repos/${{ matrix.repos }}
+        pwd
