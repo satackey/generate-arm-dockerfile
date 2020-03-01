@@ -9,8 +9,8 @@ jobs:
 
     strategy:
       matrix:
-        repos: [steveltn-https-portal, docker-compose, jwilder-nginx-proxy]
-        platforms: [linux/arm/v7, linux/arm64]
+        repos: [steveltn-https-portal, jwilder-nginx-proxy]
+        platforms: [linux/arm/v7]
 
     steps:
     - name: Set up Docker Buildx
