@@ -1,6 +1,10 @@
 name: Main CI
 
-on: [push]
+# https://github.community/t5/GitHub-Actions/How-can-I-disable-a-github-action/td-p/39648
+on:
+  push:
+    branches-ignore:
+      - '**'
 
 jobs:
   build:
